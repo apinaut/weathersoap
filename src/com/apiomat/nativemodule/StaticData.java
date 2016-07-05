@@ -1,4 +1,4 @@
-/* Copyright (c) 2011 - 2015, Apinauten GmbH
+/* Copyright (c) 2011 - 2016, Apinauten GmbH
  * All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without modification,
@@ -30,7 +30,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Marks an attribute as static data, which is the generic term for images or files in apiOmat.
+ * Marks an attribute as static data, which is the generic term for images or files in ApiOmat.
  *
  * @author andreas
  */

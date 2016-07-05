@@ -1,4 +1,4 @@
-/* Copyright (c) 2011 - 2015, Apinauten GmbH
+/* Copyright (c) 2011 - 2016, Apinauten GmbH
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification,
@@ -140,7 +140,7 @@ public class Request
 	}
 
 	/**
-	 * Hashes a password like it is done in apiOmat core
+	 * Hashes a password like it is done in ApiOmat core
 	 *
 	 * @param password the cleartext password
 	 * @return the hased password

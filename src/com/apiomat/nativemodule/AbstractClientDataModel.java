@@ -1,15 +1,15 @@
-/* Copyright (c) 2011 - 2015, Apinauten GmbH
+/* Copyright (c) 2011 - 2016, Apinauten GmbH
  * All rights reserved.
- *
+ * 
  * Redistribution and use in source and binary forms, with or without modification,
  * are permitted provided that the following conditions are met:
- *
+ * 
  * * Redistributions of source code must retain the above copyright notice, this
  * list of conditions and the following disclaimer.
  * * Redistributions in binary form must reproduce the above copyright notice,
  * this list of conditions and the following disclaimer in the documentation
  * and/or other materials provided with the distribution.
- *
+ * 
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
@@ -20,14 +20,16 @@
  * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE
  * OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
- *
+ * 
  * THIS FILE IS GENERATED AUTOMATICALLY. DON'T MODIFY IT. */
 package com.apiomat.nativemodule;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -93,7 +95,7 @@ public abstract class AbstractClientDataModel implements IModelMethods, IResourc
 	{
 		this.resourceMethods = resourceMethods;
 	}
-
+	
 	/**
 	 * The module name where this class is contained in
 	 *
@@ -107,7 +109,7 @@ public abstract class AbstractClientDataModel implements IModelMethods, IResourc
 	 * @return class name
 	 */
 	public abstract String getModelName( );
-
+		
 	@Override
 	public String getId( )
 	{
@@ -136,6 +138,20 @@ public abstract class AbstractClientDataModel implements IModelMethods, IResourc
 	public Date getLastModifiedAt( )
 	{
 		return this.lastModifiedAt;
+	}
+
+	@Override
+	public void setLastModifiedAt( Date lastModified )
+	{
+		this.methods.setLastModifiedAt( lastModified );
+		this.lastModifiedAt = this.methods.getLastModifiedAt( );
+	}
+
+	@Override
+	public void setCreatedAt( Date createdAt )
+	{
+		this.methods.setCreatedAt( createdAt );
+		this.createdAt = this.methods.getCreatedAt( );
 	}
 
 	@Override
@@ -300,10 +316,16 @@ public abstract class AbstractClientDataModel implements IModelMethods, IResourc
 		this.methods.throwException( statusCode, message );
 	}
 
-	@Deprecated
-	public IModel<?> findByForeignId( final String foreignId )
+	@Override
+	public <T> T loadReference( final String refName, final Class<? extends AbstractClientDataModel> refClazz )
 	{
-		return this.methods.findByForeignId( foreignId, getModelName( ) );
+		return this.methods.loadReference( refName, refClazz );
+	}
+
+	@Override
+	public <T> List<T> loadReferences( final String refName, final Class<? extends AbstractClientDataModel> refClazz )
+	{
+		return this.methods.loadReferences( refName, refClazz );
 	}
 
 	public IModel<?> findByForeignId( final String foreignId, final Request r )
@@ -312,23 +334,9 @@ public abstract class AbstractClientDataModel implements IModelMethods, IResourc
 	}
 
 	@Override
-	@Deprecated
-	public IModel<?> findByForeignId( final String foreignId, final String className )
-	{
-		return this.methods.findByForeignId( foreignId, className );
-	}
-
-	@Override
 	public IModel<?> findByForeignId( final String foreignId, final String className, final Request r )
 	{
 		return this.methods.findByForeignId( foreignId, className, r );
-	}
-
-	@Override
-	@Deprecated
-	public IModel<?> findByForeignId( final String foreignId, final String moduleName, final String className )
-	{
-		return this.methods.findByForeignId( foreignId, moduleName, className );
 	}
 
 	@Override
@@ -346,10 +354,37 @@ public abstract class AbstractClientDataModel implements IModelMethods, IResourc
 		return this.methods.findByForeignIds( foreignIds, moduleName, className, r );
 	}
 
-	@Deprecated
-	public IModel<?> createObject( )
+	/**
+	 * Finds objects by a collection of foreign IDs
+	 *
+	 * @param foreignIds
+	 * @param clazz
+	 * @param r
+	 * @return objects with one of the given foreign IDs
+	 */
+	public <T extends AbstractClientDataModel> List<T> findByForeignIds( final Collection<String> foreignIds,
+		final Class<T> clazz, final Request r )
 	{
-		return this.methods.createObject( getModelName( ) );
+		final String moduleName = getModuleName( clazz );
+		@SuppressWarnings( "unchecked" )
+		final IModel<?>[ ] retRaw = this.methods.findByForeignIds( foreignIds, moduleName, clazz.getSimpleName( ), r );
+		if ( retRaw == null )
+		{
+			return null;
+		}
+
+		final List<T> retList = new ArrayList<T>( );
+		for ( IModel<?> m : retRaw )
+		{
+			retList.add( ( T ) m );
+		}
+		return retList;
+	}
+
+	@Override
+	public void callMethod( String methodName, Object... params )
+	{
+		this.methods.callMethod( methodName, params );
 	}
 
 	public IModel<?> createObject( final Request r )
@@ -358,7 +393,6 @@ public abstract class AbstractClientDataModel implements IModelMethods, IResourc
 	}
 
 	@Override
-	@Deprecated
 	public IModel<?> createObject( final String className )
 	{
 		return this.methods.createObject( className );
@@ -371,7 +405,6 @@ public abstract class AbstractClientDataModel implements IModelMethods, IResourc
 	}
 
 	@Override
-	@Deprecated
 	public IModel<?> createObject( final String moduleName, final String className )
 	{
 		return this.methods.createObject( moduleName, className );
@@ -383,22 +416,23 @@ public abstract class AbstractClientDataModel implements IModelMethods, IResourc
 		return this.methods.createObject( moduleName, className, r );
 	}
 
-	@Deprecated
-	public IModel<?> findById( final String id )
+	/**
+	 * Creates a new object
+	 *
+	 * @param clazz
+	 * @param r
+	 * @return the new object
+	 */
+	public <T extends AbstractClientDataModel> T createObject( final Class<T> clazz, final Request r )
 	{
-		return this.methods.findById( id, getModelName( ) );
+		final String moduleName = getModuleName( clazz );
+		final IModel<?> retRaw = this.methods.createObject( moduleName, clazz.getSimpleName( ), r );
+		return retRaw != null ? ( T ) retRaw : null;
 	}
 
 	public IModel<?> findById( final String id, final Request r )
 	{
 		return this.methods.findById( id, getModelName( ), r );
-	}
-
-	@Override
-	@Deprecated
-	public IModel<?> findById( final String id, final String className )
-	{
-		return this.methods.findById( id, className );
 	}
 
 	@Override
@@ -408,23 +442,25 @@ public abstract class AbstractClientDataModel implements IModelMethods, IResourc
 	}
 
 	@Override
-	@Deprecated
-	public IModel<?> findById( final String id, final String moduleName, final String className )
-	{
-		return this.methods.findById( id, moduleName, className );
-	}
-
-	@Override
 	public IModel<?> findById( final String id, final String moduleName, final String className, final Request r )
 	{
 		return this.methods.findById( id, moduleName, className, r );
 	}
 
-	@Override
-	@Deprecated
-	public IModel<?>[ ] findByNames( final String className, final String query )
+	/**
+	 * Finds the object by its mongoDB ID
+	 *
+	 * @param id
+	 * @param clazz
+	 * @param r
+	 * @return objects by name and query
+	 */
+	@SuppressWarnings( "unchecked" )
+	public <T extends AbstractClientDataModel> T findById( final String id, final Class<T> clazz, final Request r )
 	{
-		return this.methods.findByNames( className, query );
+		final String moduleName = getModuleName( clazz );
+		final IModel<?> retRaw = this.methods.findById( id, moduleName, clazz.getSimpleName( ), r );
+		return retRaw != null ? ( T ) retRaw : null;
 	}
 
 	@Override
@@ -433,16 +469,10 @@ public abstract class AbstractClientDataModel implements IModelMethods, IResourc
 		return this.methods.findByNames( className, query, r );
 	}
 
+	@Deprecated
 	public IModel<?>[ ] findByNames( final String query, final Request r )
 	{
 		return this.methods.findByNames( getModelName( ), query, r );
-	}
-
-	@Override
-	@Deprecated
-	public IModel<?>[ ] findByNames( final String moduleName, final String className, final String query )
-	{
-		return this.methods.findByNames( moduleName, className, query );
 	}
 
 	@Override
@@ -450,6 +480,33 @@ public abstract class AbstractClientDataModel implements IModelMethods, IResourc
 		final Request r )
 	{
 		return this.methods.findByNames( moduleName, className, query, r );
+	}
+
+	/**
+	 * finds the objects by name and query
+	 *
+	 * @param clazz
+	 * @param query
+	 * @param r
+	 * @return objects by name and query
+	 */
+	public <T extends AbstractClientDataModel> List<T> findByNames( final Class<T> clazz, final String query,
+		final Request r )
+	{
+		final String moduleName = getModuleName( clazz );
+		@SuppressWarnings( "unchecked" )
+		final IModel<?>[ ] retRaw = this.methods.findByNames( moduleName, clazz.getSimpleName( ), query, r );
+		if ( retRaw == null )
+		{
+			return null;
+		}
+
+		final List<T> retList = new ArrayList<T>( );
+		for ( IModel<?> m : retRaw )
+		{
+			retList.add( ( T ) m );
+		}
+		return retList;
 	}
 
 	@Override
@@ -505,6 +562,20 @@ public abstract class AbstractClientDataModel implements IModelMethods, IResourc
 	public HttpServletRequest getHttpServletRequest( )
 	{
 		return this.methods.getHttpServletRequest( );
+	}
+
+	private <T extends AbstractClientDataModel> String getModuleName( final Class<T> clazz )
+	{
+		String moduleName;
+		try
+		{
+			moduleName = clazz.newInstance( ).getModuleName( );
+		}
+		catch ( Exception e )
+		{
+			moduleName = getModuleName( );
+		}
+		return moduleName;
 	}
 
 	@Override

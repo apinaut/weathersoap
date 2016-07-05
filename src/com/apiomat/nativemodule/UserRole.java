@@ -1,4 +1,4 @@
-/* Copyright (c) 2011 - 2015, Apinauten GmbH
+/* Copyright (c) 2011 - 2016, Apinauten GmbH
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification,
@@ -31,7 +31,7 @@ package com.apiomat.nativemodule;
  * User : App users authenticated in this app
  * Owner: User who created the object
  * AppAdmin: Dashboard Administrator (Customer)
- * SuperAdmin: apiOmat super administrator (only for internal use)
+ * SuperAdmin: ApiOmat super administrator (only for internal use)
  *
  * @author Andreas Fey
  */

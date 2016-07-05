@@ -88,7 +88,6 @@
 				<exclude name="**/*.java" />
 			</patternset>
 		</unzip>
-
 		<antcall target="_packageAntOld" />
 		<antcall target="_packageAntNew" />
 	</target>
@@ -102,6 +101,7 @@
 			</fileset>
 			<zipfileset dir="${src}" prefix="src">
 				<include name="**/*.java" />
+				<include name="**/META-INF/**" />
 			</zipfileset>
 			<fileset dir="${src}">
 				<include name="**/*.png" />
@@ -120,6 +120,7 @@
 			</fileset>
 			<zipfileset dir="${src}" prefix="src">
 				<include name="**/*.java" />
+				<include name="**/META-INF/**" />
 			</zipfileset>
 			<fileset dir="${src}">
 				<include name="**/*.png" />
@@ -141,17 +142,17 @@
 	</target>
 
 	<target name="_releaseWin" if="isWindows">
-		<set-released releaseState='{\"releaseState\":\"RELEASED\"}' url="${host}/yambas/rest/modules/${moduleName}" username="${customerEmail}" password="${password}"  />
+		<set-released releaseState='{&quot;releaseState&quot;:&quot;RELEASED&quot;}' url="${host}/yambas/rest/modules/${moduleName}" system="${system}" username="${customerEmail}" password="${password}"  />
 	</target>
 
 	<target name="_releaseUnix" if="isUnix">
-		<set-released releaseState='{"releaseState":"RELEASED"}' url="${host}/yambas/rest/modules/${moduleName}" username="${customerEmail}" password="${password}" />
+		<set-released releaseState='{"releaseState":"RELEASED"}' url="${host}/yambas/rest/modules/${moduleName}" system="${system}" username="${customerEmail}" password="${password}" />
 	</target>
 
 	<target name="release" description="Sets the NativeModule released" depends="_releaseWin, _releaseUnix" />
 
 	<target name="_unreleaseWin" if="isWindows">
-		<set-released releaseState='{\"releaseState\":\"UNRELEASED\"}' url="${host}/yambas/rest/modules/${moduleName}" system="${system}" username="${customerEmail}" password="${password}" />
+		<set-released releaseState='{&quot;releaseState&quot;:&quot;UNRELEASED&quot;}' url="${host}/yambas/rest/modules/${moduleName}" system="${system}" username="${customerEmail}" password="${password}" />
 	</target>
 
 	<target name="_unreleaseUnix" if="isUnix">
@@ -161,7 +162,7 @@
 	<target name="unrelease" description="Sets the NativeModule unreleased" depends="_unreleaseWin, _unreleaseUnix" />
 
 	<target name="compile" depends="init" description="Compile the source">
-		<javac srcdir="${src}" destdir="${build}" classpathref="classpath" debug="true" encoding="UTF-8" />
+		<javac srcdir="${src}" destdir="${build}" classpathref="classpath" debug="true" encoding="UTF-8"/>
 	</target>
 
 	<target name="clean" description="Clean up">

@@ -22,12 +22,13 @@
  * OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.apiomat.nativemodule.soapweather;
+package com.apiomat.nativemodule.soapweathertransient;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -89,7 +90,40 @@ public class CityWeatherHooks<T extends CityWeather> implements IModelHooks<City
 	@Override
 	public List<CityWeather> doGetAll( String query, Request r )
 	{
-		return null;
+		String cityName = "Frankfurt";
+		String countryName = "Germany";
+		Matcher matches = Pattern.compile( "cityName == \"(.*?)\" && countryName == \"(.*?)\"" ).matcher( query );
+		if ( matches.find( ) )
+		{
+			cityName = matches.group( 1 );
+			countryName = matches.group( 2 );
+		}
+		List<CityWeather> cityList = new ArrayList<>( );
+		if ( StringUtils.isNotBlank( cityName ) && StringUtils.isNotBlank( countryName ) )
+		{
+			GlobalWeather weatherServiceStub = new GlobalWeather( );
+			final GlobalWeatherSoap webService = weatherServiceStub.getGlobalWeatherSoap12( );
+			String weatherCity = webService.getWeather( cityName, countryName );
+			SOAPWeatherTransient.AOM.log( r.getApplicationName( ), "String: " + weatherCity );
+			/* write result to obj */
+			try
+			{
+				final long resultInC = parseResult( weatherCity );
+				CityWeather weatherObj =
+					( CityWeather ) SOAPWeatherTransient.AOM.createObject( r.getApplicationName( ),
+						SOAPWeatherTransient.class.getSimpleName( ), CityWeather.class.getSimpleName( ), r );
+				weatherObj.setCityName( cityName );
+				weatherObj.setCountryName( countryName );
+				weatherObj.setTemperature( resultInC * 1.0d );
+				cityList.add( weatherObj );
+			}
+			catch ( ParserConfigurationException | SAXException | IOException e )
+			{
+				SOAPWeatherTransient.AOM
+					.logError( r.getApplicationName( ), "Can't get temperature: " + e.getMessage( ) );
+			}
+		}
+		return cityList;
 	}
 
 	@Override
@@ -136,25 +170,7 @@ public class CityWeatherHooks<T extends CityWeather> implements IModelHooks<City
 	@Override
 	public boolean beforePut( CityWeather objFromDB, CityWeather obj, Request r )
 	{
-		final String cityName = obj.getCityName( ) != null ? obj.getCityName( ) : objFromDB.getCityName( );
-		final String countryName = obj.getCountryName( ) != null ? obj.getCountryName( ) : objFromDB.getCountryName( );
-		if ( StringUtils.isNotBlank( cityName ) && StringUtils.isNotBlank( countryName ) )
-		{
-			GlobalWeather weatherServiceStub = new GlobalWeather( );
-			final GlobalWeatherSoap webService = weatherServiceStub.getGlobalWeatherSoap12( );
-			String weatherCity = webService.getWeather( cityName, countryName );
-			SOAPWeather.AOM.log( r.getApplicationName( ), "String: " + weatherCity );
-			/* write result to obj */
-			try
-			{
-				final long resultInC = parseResult( weatherCity );
-				obj.setTemperature( resultInC * 1.0d );
-			}
-			catch ( ParserConfigurationException | SAXException | IOException e )
-			{
-				SOAPWeather.AOM.logError( r.getApplicationName( ), "Can't get temperature: " + e.getMessage( ) );
-			}
-		}
+
 		return false;
 	}
 

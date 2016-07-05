@@ -1,4 +1,4 @@
-/* Copyright (c) 2011 - 2015, Apinauten GmbH
+/* Copyright (c) 2011 - 2016, Apinauten GmbH
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification,
@@ -42,12 +42,12 @@ public @interface Module
 	 * The description of the module
 	 */
 	String description( ) default "";
-	
+
 	/**
 	 * The category of the module
 	 */
 	String category( ) default "";
-	
+
 	/**
 	 * The URL where documentation for this module can be found
 	 */

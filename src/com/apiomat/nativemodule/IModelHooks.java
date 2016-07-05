@@ -1,4 +1,4 @@
-/* Copyright (c) 2011 - 2015, Apinauten GmbH
+/* Copyright (c) 2011 - 2016, Apinauten GmbH
  * All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without modification,
@@ -150,7 +150,7 @@ public interface IModelHooks<T>
 		String password, Request request );
 
 	/* The following methods get called when the underlying model is NOT set to "transient" in its meta model. Data is
-	 * used from apiOmat database */
+	 * used from ApiOmat database */
 
 	/**
 	 * Gets invoked before the object is persisted; one may set additional values here or change existing ones. Changes

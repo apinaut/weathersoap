@@ -1,4 +1,4 @@
-/* Copyright (c) 2011 - 2015, Apinauten GmbH
+/* Copyright (c) 2011 - 2016, Apinauten GmbH
  * All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without modification,
@@ -37,12 +37,12 @@ import javax.ws.rs.core.UriInfo;
 public interface IModule extends Serializable
 {
 	/**
-	 * Gets called when a module is deployed to apiOmat
+	 * Gets called when a module is deployed to ApiOmat
 	 */
 	void onDeploy( );
 
 	/**
-	 * Gts called when a module is undeployed from apiOmat
+	 * Gts called when a module is undeployed from ApiOmat
 	 */
 	void onUndeploy( );
 
@@ -68,7 +68,7 @@ public interface IModule extends Serializable
 		SecurityContext securityContext, Request wsRequest );
 
 	/**
-	 * apiOmat runs an internal Cron timer. This method is called every hour to enable the module to do recurring tasks.
+	 * ApiOmat runs an internal Cron timer. This method is called every hour to enable the module to do recurring tasks.
 	 * 
 	 * @param appName the app for which this cronjob runs
 	 * @param system the apiomat system
@@ -76,7 +76,7 @@ public interface IModule extends Serializable
 	void onCronHourly( final String appName, final String system );
 
 	/**
-	 * apiOmat runs an internal Cron timer. This method is called every day to enable the module to do recurring tasks.
+	 * ApiOmat runs an internal Cron timer. This method is called every day to enable the module to do recurring tasks.
 	 * 
 	 * @param appName the app for which this cronjob runs
 	 * @param system the apiomat system
@@ -84,7 +84,7 @@ public interface IModule extends Serializable
 	void onCronDaily( final String appName, final String system );
 
 	/**
-	 * apiOmat runs an internal Cron timer. This method is called every week to enable the module to do recurring tasks.
+	 * ApiOmat runs an internal Cron timer. This method is called every week to enable the module to do recurring tasks.
 	 * 
 	 * @param appName the app for which this cronjob runs
 	 * @param system the apiomat system
@@ -92,7 +92,7 @@ public interface IModule extends Serializable
 	void onCronWeekly( final String appName, final String system );
 
 	/**
-	 * apiOmat runs an internal Cron timer. This method is called every month to enable the module to do recurring
+	 * ApiOmat runs an internal Cron timer. This method is called every month to enable the module to do recurring
 	 * tasks.
 	 * 
 	 * @param appName the app for which this cronjob runs

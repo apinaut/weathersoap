@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011 - 2015, Apinauten GmbH
+ * Copyright (c) 2011 - 2016, Apinauten GmbH
  * All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without modification, 
@@ -24,6 +24,8 @@
  */
 package com.apiomat.nativemodule.basics;
 
+import java.lang.reflect.Method;
+import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -47,32 +49,41 @@ import com.apiomat.nativemodule.basics.*;
 @Model( moduleName = "Basics" )
 public class Role extends AbstractClientDataModel implements IModel<Role>
 {
+    /**
+     * Contains the name of the module that this model belongs to
+     */
+    public static final String MODULE_NAME = "Basics";
+    /**
+     * Contains the name of the model
+     */
+    public static final String MODEL_NAME = "Role";
+    
     /** class specific attributes */
     private List<String> members = new ArrayList<>();
     @Mandatory
     private String name = null;
     /**
-    * Protected constructor; to create a new instance, use the createObject() method
-    */
+     * Protected constructor; to create a new instance, use the createObject() method
+     */
     public Role ()
     {}
     
     /**
-    * Returns the name of the module where this class belongs to
-    */
+     * Returns the name of the module where this class belongs to
+     */
     @Override
     public String getModuleName( )
     {
-        return "Basics";
+        return MODULE_NAME;
     }
     
-     /**
-    * Returns the name of the model
-    */
+    /**
+     * Returns the name of the model
+     */
     @Override
     public String getModelName( )
     {
-        return "Role";
+        return MODEL_NAME;
     }
 
     public List<String> getMembers()
@@ -101,7 +112,7 @@ public class Role extends AbstractClientDataModel implements IModel<Role>
     {
         super.write( kryo, output );
         output.writeInt( this.members == null ? -1 : this.members.size() );
-                
+        
         if(this.members != null)
             for( String _members : this.members )
         {
@@ -120,6 +131,9 @@ public class Role extends AbstractClientDataModel implements IModel<Role>
     public void read( final Kryo kryo, final Input input )
     {
         super.read( kryo, input );
+        
+        final Request req = (Request)kryo.getContext( ).get( "creq" );
+        req.toString( );
         int membersSize = input.readInt();
 
         if(membersSize >= 0)
@@ -128,8 +142,7 @@ public class Role extends AbstractClientDataModel implements IModel<Role>
         }
         else if(membersSize == -1)
         {
-            this.members = null;            
-        }
+            this.members = null;        }
         for(int i=0; i<membersSize; i++)
         {
             this.members.add( input.readString( ) );

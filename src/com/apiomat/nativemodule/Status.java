@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011 - 2015, Apinauten GmbH
+ * Copyright (c) 2011 - 2016, Apinauten GmbH
  * All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without modification, 
@@ -27,7 +27,7 @@
 package com.apiomat.nativemodule;
 
 /**
- * apiOmat status codes
+ * ApiOmat status codes
 */
 public enum Status
 {
@@ -69,7 +69,7 @@ public enum Status
     TBLR_POST_ID_MISSING( 737, "Tumblr post id has to be set!" ),
     LOCATION_INVALID( 738, "Location data is invalid (latitude or longitude missing)!" ),
     SCRIPT_EXCEPTION( 739, "Exception was raised in external code!" ),
-    BAD_CUSTOMERNAME( 740, "Customer name must contain only characters A-Z,a-z or 0-9!" ),
+    BAD_ACCOUNTNAME( 740, "Account name must contain only characters A-Z,a-z or 0-9!" ),
     BAD_IMAGE_ALPHA( 746, "alpha is wrong (must be a double value between 0.0 and 1.0)" ),
     BAD_IMAGE_BGCOLOR( 747, "bgcolor is wrong (must be an RGB hex value without #, like 'FF0000' for red)" ),
     BAD_IMAGE_FORMAT( 748, "format is wrong (can only be png, gif, bmp or jpg/jpeg)" ),
@@ -97,6 +97,9 @@ public enum Status
     INVALID_PASSWD_LENGTH( 764, "Password must have a length of at least 6 characters!" ),
     BAD_PROMOTIONCODE_VALID( 765, "Valid from/to of Code is null" ),
     BAD_CLASS_NAME_SAME_AS_MODULE( 766, "Class name must not be the same as the module name!" ),
+    NO_ORG_MEMBER( 767, "Customer is not a member of the organization" ),
+    MODULE_CLASS_NOT_CONTAINED( 768, "Module main class is not contained in the uploaded file! Probably wrong module uploaded?" ),
+    BAD_GROUP_NAME( 769, "Account name must contain only characters A-Z,a-z or 0-9!" ),
     APPLICATION_NOT_FOUND( 801, "Application was not found!" ),
     CUSTOMER_NOT_FOUND( 802, "Customer was not found!" ),
     ID_NOT_FOUND( 803, "ID was not found!" ),
@@ -106,6 +109,9 @@ public enum Status
     PLAN_NOT_FOUND( 807, "Plan was not found!" ),
     PROMOCODE_NOT_FOUND( 808, "Promotion code not valid!" ),
     DEMOAPP_NOT_FOUND( 809, "This language has no demo content" ),
+    ORGANIZATION_NOT_FOUND( 810, "Organization was not found!" ),
+    GROUP_NOT_FOUND( 811, "Group was not found!" ),
+    ACCOUNT_NOT_FOUND( 812, "Account was not found!" ),
     MODULE_USE_FORBIDDEN( 820, "Required module is not attached to app" ),
     PUSH_ERROR_APIKEY( 821, "No API Key defined for Push service!" ),
     PUSH_ERROR_CERTIFICATE( 822, "No certificate defined for Push service!" ),
@@ -121,15 +127,19 @@ public enum Status
     NATIVEMODULE_DEACTIVATED( 1822, "Native Module feature is not activated for this installation." ),
     LICENSE_INVALID( 1823, "Your license does not allow this action." ),
     PAYMENT_NO_CUSTOMERROLES( 1824, "Customer role usage is not available for free plan." ),
-    WHITELABEL( 1825, "Only available at whitelabel installations." ),
-    WHITELABEL_NOT( 1826, "Not available at whitelabel installations." ),
+    WHITELABEL( 1825, "Only available for whitelabel installations." ),
+    WHITELABEL_NOT( 1826, "Not available for whitelabel installations." ),
     MODULE_CONFIG_NO_DOT( 1827, "No dot allowed in module config key." ),
     PLAN_FALLBACK( 1828, "Application cannot be activated without valid plan." ),
     PLAN_INACTIVE( 1829, "Plan is not selectable!" ),
+    ENTERPRISE( 1830, "Only available for enterprise installations." ),
+    ACCOUNT_UNACCEPTED_CONTRACTS( 1831, "Account has unaccepted Contracts" ),
     ID_EXISTS( 830, "ID exists!" ),
     NAME_RESERVED( 831, "Name is reserved!" ),
     CIRCULAR_DEPENDENCY( 832, "You can't set circular inheritance!" ),
     NAME_EXISTS( 833, "Name is already used!" ),
+    EMAIL_EXISTS( 834, "E-mail is already used!" ),
+    CUSTOMER_IN_ORG( 835, "Customer is already member of an organization" ),
     UNAUTHORIZED( 840, "Authorization failed!" ),
     WRONG_APIKEY( 841, "API Key was not correct!" ),
     EVALANCHE_UNAUTH( 842, "Authorization failed! Maybe username/password was not set for evelanche configuration?" ),
@@ -152,11 +162,17 @@ public enum Status
     TUMBLR_ERROR( 914, "Error communicating with tumblr!" ),
     EXECUTE_METHOD_ERROR_PRIMITIVE( 915, "Only primitive types are allowed" ),
     EXECUTE_METHOD_ERROR( 916, "Execute method failed" ),
-    OAUTH_TOKEN_REQUEST_ERROR( 918, "An error occured during requesting an apiOmat OAuth2 token" ),
+    OAUTH_TOKEN_REQUEST_ERROR( 918, "An error occured during requesting an ApiOmat OAuth2 token" ),
     FINDING_RESOURCE_ERROR( 919, "An error occured while trying to find the resource" ),
     NATIVEMODULE_DEPLOY( 920, "Executing onDeploy failed" ),
     TOKEN_SEARCH_ERROR( 921, "An error occured while searching for tokens" ),
     MODULE_CONFIG_MISSING( 922, "Your module seems not to be configured properly" ),
+    NATIVEMODULE_INIT( 923, "Could not initialize git repository" ),
+    NATIVEMODULE_PULL( 924, "Could not pull git repository" ),
+    NATIVEMODULE_PUSH( 925, "Could not push git repository" ),
+    NO_DOGET_RETURN( 926, "The module's doGet didn't return a model" ),
+    CUSTOMER_TWO_ORGS( 927, "The customer was found in two organizations" ),
+    EMAIL_ERROR( 928, "Error during sending email" ),
     HREF_NOT_FOUND( 601, "Class has no HREF; please save it first!" ),
     WRONG_URI_SYNTAX( 602, "URI syntax is wrong" ),
     WRONG_CLIENT_PROTOCOL( 603, "Client protocol is wrong" ),

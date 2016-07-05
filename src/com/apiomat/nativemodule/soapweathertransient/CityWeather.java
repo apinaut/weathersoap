@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011 - 2015, Apinauten GmbH
+ * Copyright (c) 2011 - 2016, Apinauten GmbH
  * All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without modification, 
@@ -22,8 +22,10 @@
  * OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED 
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.apiomat.nativemodule.soapweather;
+package com.apiomat.nativemodule.soapweathertransient;
 
+import java.lang.reflect.Method;
+import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -44,40 +46,48 @@ import com.apiomat.nativemodule.basics.*;
 * 
 */
 @SuppressWarnings( "unused" )
-@Model( moduleName = "SOAPWeather", hooksClassName = "com.apiomat.nativemodule.soapweather.CityWeatherHooks", 
-    isTransient = false, 
-    requiredUserRoleCreate=UserRole.User, requiredUserRoleRead=UserRole.User, 
+@Model( moduleName = "SOAPWeatherTransient", hooksClassName = "com.apiomat.nativemodule.soapweathertransient.CityWeatherHooks",
+    isTransient = true,    requiredUserRoleCreate=UserRole.User, requiredUserRoleRead=UserRole.User,
     requiredUserRoleWrite=UserRole.Owner, restrictResourceAccess=false,
     allowedRolesCreate={}, allowedRolesRead={},
     allowedRolesWrite={}, allowedRolesGrant={})
 public class CityWeather extends AbstractClientDataModel implements IModel<CityWeather>
 {
+    /**
+     * Contains the name of the module that this model belongs to
+     */
+    public static final String MODULE_NAME = "SOAPWeatherTransient";
+    /**
+     * Contains the name of the model
+     */
+    public static final String MODEL_NAME = "CityWeather";
+    
     /** class specific attributes */
     private String cityName = null;
     private String countryName = null;
     private Double temperature = null;
     /**
-    * Protected constructor; to create a new instance, use the createObject() method
-    */
+     * Protected constructor; to create a new instance, use the createObject() method
+     */
     public CityWeather ()
     {}
     
     /**
-    * Returns the name of the module where this class belongs to
-    */
+     * Returns the name of the module where this class belongs to
+     */
     @Override
     public String getModuleName( )
     {
-        return "SOAPWeather";
+        return MODULE_NAME;
     }
     
-     /**
-    * Returns the name of the model
-    */
+    /**
+     * Returns the name of the model
+     */
     @Override
     public String getModelName( )
     {
-        return "CityWeather";
+        return MODEL_NAME;
     }
 
     public String getCityName()
@@ -140,6 +150,9 @@ public class CityWeather extends AbstractClientDataModel implements IModel<CityW
     public void read( final Kryo kryo, final Input input )
     {
         super.read( kryo, input );
+        
+        final Request req = (Request)kryo.getContext( ).get( "creq" );
+        req.toString( );
         if( input.readBoolean() )
         {
             this.cityName = input.readString( );

@@ -22,7 +22,7 @@
  * OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED 
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.apiomat.nativemodule.soapweather;
+package com.apiomat.nativemodule.soapweathertransient;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.GET;

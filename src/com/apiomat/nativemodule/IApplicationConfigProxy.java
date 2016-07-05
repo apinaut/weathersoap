@@ -1,4 +1,4 @@
-/* Copyright (c) 2011 - 2015, Apinauten GmbH
+/* Copyright (c) 2011 - 2016, Apinauten GmbH
  * All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without modification,
@@ -33,7 +33,7 @@ public interface IApplicationConfigProxy
 {
 	/**
 	 * Returns the configuration value of the given app for the given key and system.
-	 *
+	 * 
 	 * @param key config key, which was defined using @NativeModuleConfig
 	 * @param appName application name
 	 * @param usedSystem system name

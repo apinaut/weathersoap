@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011 - 2015, Apinauten GmbH
+ * Copyright (c) 2011 - 2016, Apinauten GmbH
  * All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without modification, 
@@ -24,6 +24,8 @@
  */
 package com.apiomat.nativemodule.basics;
 
+import java.lang.reflect.Method;
+import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -47,6 +49,15 @@ import com.apiomat.nativemodule.basics.*;
 @Model( moduleName = "Basics" )
 public class User extends AbstractClientDataModel implements IModel<User>
 {
+    /**
+     * Contains the name of the module that this model belongs to
+     */
+    public static final String MODULE_NAME = "Basics";
+    /**
+     * Contains the name of the model
+     */
+    public static final String MODEL_NAME = "User";
+    
     /** class specific attributes */
     private Date dateOfBirth = null;
     private Map<String, Object> dynamicAttributes = new ConcurrentHashMap<>();
@@ -58,27 +69,27 @@ public class User extends AbstractClientDataModel implements IModel<User>
     @Mandatory
     private String userName = null;
     /**
-    * Protected constructor; to create a new instance, use the createObject() method
-    */
+     * Protected constructor; to create a new instance, use the createObject() method
+     */
     public User ()
     {}
     
     /**
-    * Returns the name of the module where this class belongs to
-    */
+     * Returns the name of the module where this class belongs to
+     */
     @Override
     public String getModuleName( )
     {
-        return "Basics";
+        return MODULE_NAME;
     }
     
-     /**
-    * Returns the name of the model
-    */
+    /**
+     * Returns the name of the model
+     */
     @Override
     public String getModelName( )
     {
-        return "User";
+        return MODEL_NAME;
     }
 
     public Date getDateOfBirth()
@@ -256,6 +267,9 @@ public class User extends AbstractClientDataModel implements IModel<User>
     public void read( final Kryo kryo, final Input input )
     {
         super.read( kryo, input );
+        
+        final Request req = (Request)kryo.getContext( ).get( "creq" );
+        req.toString( );
         final long _dateOfBirth = input.readLong();
         this.dateOfBirth = _dateOfBirth == 0 ? null : new Date(_dateOfBirth);
         final int dynamicAttributesSize = input.readInt();
