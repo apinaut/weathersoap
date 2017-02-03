@@ -229,7 +229,7 @@ public class CityWeatherHooks<T extends CityWeather> implements IModelHooks<City
 		/* If you want to change the retuned list of elements, you have to create a new list
 		 * and add the elements to return to it. Because getting elements from the "objects"
 		 * list will return a copy, changing values in this list does not have any effect.
-		 * 
+		 *
 		 * If NULL is returned, unnecessary conversions are omitted and result is taken from database. */
 		return null;
 	}

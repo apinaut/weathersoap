@@ -77,4 +77,7 @@ public @interface NativeModuleConfig
 
 	/** display order of this config */
 	int order( );
+
+	/** TRUE if all cluster nodes should be notified if this config value changes */
+	boolean notifyAllNodes( ) default false;
 }

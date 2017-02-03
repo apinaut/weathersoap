@@ -1,15 +1,15 @@
 /* Copyright (c) 2011 - 2016, Apinauten GmbH
  * All rights reserved.
- * 
+ *
  * Redistribution and use in source and binary forms, with or without modification,
  * are permitted provided that the following conditions are met:
- * 
+ *
  * * Redistributions of source code must retain the above copyright notice, this
  * list of conditions and the following disclaimer.
  * * Redistributions in binary form must reproduce the above copyright notice,
  * this list of conditions and the following disclaimer in the documentation
  * and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
@@ -20,16 +20,16 @@
  * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE
  * OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
- * 
+ *
  * THIS FILE IS GENERATED AUTOMATICALLY. DON'T MODIFY IT. */
 package com.apiomat.nativemodule;
 
 import java.util.List;
 
 /**
- * Interface for hook methods.
+ * Old interface for hook methods.
  *
- * This class is also delived to module develpers via module SDK. To implement methods for a specific model, simply
+ * This class was also delivered to module developers via module SDK. To implement methods for a specific model, simply
  * create a class implementing this interface. Yambas will find it in the module .jar via lookup and use it
  * automatically.
  * You can test these methods by invkoing them manually.
@@ -37,7 +37,8 @@ import java.util.List;
  * @author andreas
  * @param <T> The type of the model
  */
-public interface IModelHooks<T>
+@Deprecated
+public interface IModelHooks<T> extends IModelHooksCommon<T>
 {
 	/**
 	 * gets called by server; the module name and model name of the calling object are set here and can be stored in the
@@ -46,7 +47,29 @@ public interface IModelHooks<T>
 	 * @param model the model which is used to call the hook methods
 	 *
 	 */
+	@Override
 	void setCallingModel( T model );
+
+	/**
+	 * You can implement a custom authentication method in your own class.
+	 * If access on an arbitrary model is checked, depending on the order in which an app configured its authentication
+	 * classes, this class gets loaded and the authentication method gets called.
+	 *
+	 * Note: passwordOrToken only contains a token if the Model annotation
+	 * {@link com.apiomat.nativemodule.Model#callAuthWithValidToken()} is set to {@value false} AND the token is valid.
+	 * Invalid tokens get rejected by ApiOmat automatically.
+	 *
+	 * @param httpVerb GET / POST / DELETE / PUT
+	 * @param modelName name of the model where the user wants access to
+	 * @param modelForeignId foreign ID of the model where the user wants access to
+	 * @param userNameOrEmail username or email of the user
+	 * @param passwordOrToken password or token of the user
+	 * @param request the request object
+	 * @return TRUE on successful auth
+	 */
+	@Override
+	boolean auth( String httpVerb, String modelName, String modelForeignId, String userNameOrEmail,
+		String passwordOrToken, Request request );
 
 	/* The following methods get called when the underlying model is set to "transient" in its meta model. Then, the
 	 * usual logic on server side is not called but the following methods */
@@ -132,22 +155,6 @@ public interface IModelHooks<T>
 	 * @return list of references on this object
 	 */
 	<Z extends AbstractClientDataModel> List<Z> doGetRef( String refName, String query, Request request );
-
-	/**
-	 * You can implement a custom authentication method in your own user class, which must inherit from Basics.User. If
-	 * access on an arbitrary model is checked, your user class (inheriting from user) is resolved by the users name and
-	 * the authentication method gets called.
-	 *
-	 * @param httpVerb GET / POST / DELETE / PUT
-	 * @param modelName name of the model where the user wants access to
-	 * @param modelForeignId foreign ID of the model where the user wants access to
-	 * @param userNameOrEmail username or email of the user
-	 * @param password users password
-	 * @param request the request object
-	 * @return TRUE on successfull auth
-	 */
-	boolean auth( String httpVerb, String modelName, String modelForeignId, String userNameOrEmail,
-		String password, Request request );
 
 	/* The following methods get called when the underlying model is NOT set to "transient" in its meta model. Data is
 	 * used from ApiOmat database */

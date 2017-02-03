@@ -99,36 +99,48 @@ public interface IModelMethods
 	public String getOwnerUserName( );
 
 	/**
+	 * Returns the <b>object specific</b> read roles.
+	 * Class-specific roles can be found at the @Model annotation of the class.
+	 *
 	 * @return array of roles which are allowed to read
 	 */
 	public String[ ] getAllowedRolesRead( );
 
 	/**
-	 * Sets the roles which are allowed to read
+	 * Sets the <b>object specific</b> roles which are allowed to read.
+	 * Class-specific roles can be found at the @Model annotation of the class.
 	 *
 	 * @param allowedRolesRead
 	 */
 	public void setAllowedRolesRead( String[ ] allowedRolesRead );
 
 	/**
+	 * Returns the <b>object specific</b> write roles.
+	 * Class-specific roles can be found at the @Model annotation of the class.
+	 *
 	 * @return array of roles which are allowed to write
 	 */
 	public String[ ] getAllowedRolesWrite( );
 
 	/**
-	 * Sets the roles which are allowed to write
+	 * Sets the <b>object specific</b> roles which are allowed to write.
+	 * Class-specific roles can be found at the @Model annotation of the class.
 	 *
 	 * @param allowedRolesWrite
 	 */
 	public void setAllowedRolesWrite( String[ ] allowedRolesWrite );
 
 	/**
+	 * Returns the <b>object specific</b> grant roles.
+	 * Class-specific roles can be found at the @Model annotation of the class.
+	 *
 	 * @return array of roles which are allowed to grant further rights
 	 */
 	public String[ ] getAllowedRolesGrant( );
 
 	/**
-	 * Sets roles which are allowed to grant further rights
+	 * Sets the <b>object specific</b> roles which are allowed to grant further rights.
+	 * Class-specific roles can be found at the @Model annotation of the class.
 	 *
 	 * @param allowedRolesGrant
 	 */
@@ -179,7 +191,7 @@ public interface IModelMethods
 	public void setCreatedAt( final Date createdAt );
 
 	/**
-	 * Loads a resource as byte arraay from url
+	 * Loads a resource as byte array from url
 	 *
 	 * @param href
 	 * @return byte array
@@ -421,7 +433,7 @@ public interface IModelMethods
 		final String className, final Request r );
 
 	/**
-	 * finds the objects by name and query
+	 * Finds objects by name and query
 	 *
 	 * @param className
 	 *        the classname of the object
@@ -429,7 +441,7 @@ public interface IModelMethods
 	 *        the query
 	 * @param r
 	 *        the request
-	 * @return the objects found for that query
+	 * @return Found objects. Null if strictChecks is enabled and access to one of the found models is unauthorized.
 	 */
 	public IModel<?>[ ] findByNames( final String className, final String query,
 		final Request r );

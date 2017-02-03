@@ -57,4 +57,11 @@ public @interface Module
 	 * The used modules which are required to use this module
 	 */
 	String[ ] usedModules( ) default { };
+
+	/**
+	 * Array of needed JAVA security permissions; module must be deployed as superadmin to enable these!
+	 *
+	 * @return Array of needed JAVA security permissions
+	 */
+	SecurityPermission[ ] securityPermissions( ) default { };
 }

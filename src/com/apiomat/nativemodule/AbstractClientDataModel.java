@@ -1,15 +1,15 @@
 /* Copyright (c) 2011 - 2016, Apinauten GmbH
  * All rights reserved.
- * 
+ *
  * Redistribution and use in source and binary forms, with or without modification,
  * are permitted provided that the following conditions are met:
- * 
+ *
  * * Redistributions of source code must retain the above copyright notice, this
  * list of conditions and the following disclaimer.
  * * Redistributions in binary form must reproduce the above copyright notice,
  * this list of conditions and the following disclaimer in the documentation
  * and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
@@ -20,7 +20,7 @@
  * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE
  * OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
- * 
+ *
  * THIS FILE IS GENERATED AUTOMATICALLY. DON'T MODIFY IT. */
 package com.apiomat.nativemodule;
 
@@ -35,22 +35,11 @@ import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 
-import com.esotericsoftware.kryo.Kryo;
-import com.esotericsoftware.kryo.KryoSerializable;
-import com.esotericsoftware.kryo.io.Input;
-import com.esotericsoftware.kryo.io.Output;
-import com.thoughtworks.xstream.XStream;
-
 /**
  * @author andreas
  */
-public abstract class AbstractClientDataModel implements IModelMethods, IResourceMethods, KryoSerializable
+public abstract class AbstractClientDataModel implements IModelMethods, IResourceMethods
 {
-	/**
-	 * Static XStream var
-	 */
-	public static final XStream XSTREAM = new XStream( );
-
 	/** The customer-provided ID of this object */
 	protected String foreignId;
 	/** Creation date of this object */
@@ -95,7 +84,7 @@ public abstract class AbstractClientDataModel implements IModelMethods, IResourc
 	{
 		this.resourceMethods = resourceMethods;
 	}
-	
+
 	/**
 	 * The module name where this class is contained in
 	 *
@@ -109,7 +98,7 @@ public abstract class AbstractClientDataModel implements IModelMethods, IResourc
 	 * @return class name
 	 */
 	public abstract String getModelName( );
-		
+
 	@Override
 	public String getId( )
 	{
@@ -163,8 +152,14 @@ public abstract class AbstractClientDataModel implements IModelMethods, IResourc
 	@Override
 	public String save( )
 	{
+		if ( this.getClass( ).getAnnotation( Model.class ).isTransient( ) )
+		{
+			this.foreignId = this.methods.save( );
+			return getForeignId( );
+		}
 		this.id = this.methods.save( );
 		return getId( );
+
 	}
 
 	@Override
@@ -199,7 +194,11 @@ public abstract class AbstractClientDataModel implements IModelMethods, IResourc
 	@Override
 	public void setAllowedRolesRead( String[ ] allowedRolesRead )
 	{
-		this.allowedRolesRead.addAll( Arrays.asList( allowedRolesRead ) );
+		if ( allowedRolesRead == null )
+		{
+			allowedRolesRead = new String[ 0 ];
+		}
+		this.allowedRolesRead = new HashSet<String>( Arrays.asList( allowedRolesRead ) );
 	}
 
 	@Override
@@ -211,7 +210,11 @@ public abstract class AbstractClientDataModel implements IModelMethods, IResourc
 	@Override
 	public void setAllowedRolesWrite( String[ ] allowedRolesWrite )
 	{
-		this.allowedRolesWrite.addAll( Arrays.asList( allowedRolesWrite ) );
+		if ( allowedRolesWrite == null )
+		{
+			allowedRolesWrite = new String[ 0 ];
+		}
+		this.allowedRolesWrite = new HashSet<String>( Arrays.asList( allowedRolesWrite ) );
 	}
 
 	@Override
@@ -223,7 +226,11 @@ public abstract class AbstractClientDataModel implements IModelMethods, IResourc
 	@Override
 	public void setAllowedRolesGrant( String[ ] allowedRolesGrant )
 	{
-		this.allowedRolesGrant.addAll( Arrays.asList( allowedRolesGrant ) );
+		if ( allowedRolesGrant == null )
+		{
+			allowedRolesGrant = new String[ 0 ];
+		}
+		this.allowedRolesGrant = new HashSet<String>( Arrays.asList( allowedRolesGrant ) );
 	}
 
 	@Override
@@ -483,12 +490,12 @@ public abstract class AbstractClientDataModel implements IModelMethods, IResourc
 	}
 
 	/**
-	 * finds the objects by name and query
+	 * Finds objects by name and query
 	 *
 	 * @param clazz
 	 * @param query
 	 * @param r
-	 * @return objects by name and query
+	 * @return Found objects. Null if strictChecks is enabled and access to one of the found models is unauthorized.
 	 */
 	public <T extends AbstractClientDataModel> List<T> findByNames( final Class<T> clazz, final String query,
 		final Request r )
@@ -576,88 +583,5 @@ public abstract class AbstractClientDataModel implements IModelMethods, IResourc
 			moduleName = getModuleName( );
 		}
 		return moduleName;
-	}
-
-	@Override
-	public void write( Kryo kryo, Output output )
-	{
-		output.writeBoolean( this.id != null );
-		if ( this.id != null )
-		{
-			output.writeString( this.id );
-		}
-		output.writeBoolean( getForeignId( ) != null );
-		if ( getForeignId( ) != null )
-		{
-			output.writeString( getForeignId( ) );
-		}
-		output.writeString( getModuleName( ) );
-		output.writeString( getModelName( ) );
-		output.writeString( getApplicationName( ) );
-		output.writeString( getOwnerUserName( ) );
-		output.writeInt( this.allowedRolesRead.size( ) );
-		for ( String role : this.allowedRolesRead )
-		{
-			output.writeString( role );
-		}
-		output.writeInt( this.allowedRolesWrite.size( ) );
-		for ( String role : this.allowedRolesWrite )
-		{
-			output.writeString( role );
-		}
-		output.writeInt( this.allowedRolesGrant.size( ) );
-		for ( String role : this.allowedRolesGrant )
-		{
-			output.writeString( role );
-		}
-		output.writeBoolean( this.restrictResourceAccess );
-		output.writeLong( this.lastModifiedAt == null ? -1 : this.lastModifiedAt.getTime( ) );
-		output.writeLong( this.createdAt == null ? -1 : this.createdAt.getTime( ) );
-	}
-
-	@Override
-	public void read( Kryo kryo, Input input )
-	{
-		if ( input.readBoolean( ) )
-		{
-			this.id = input.readString( );
-		}
-		if ( input.readBoolean( ) )
-		{
-			this.foreignId = input.readString( );
-		}
-		input.readString( );
-		input.readString( );
-		input.readString( );
-		this.ownerUserName = input.readString( );
-		this.allowedRolesRead = new HashSet<>( );
-		int allowedRolesReadSize = input.readInt( );
-		for ( int i = 0; i < allowedRolesReadSize; i++ )
-		{
-			this.allowedRolesRead.add( input.readString( ) );
-		}
-		this.allowedRolesWrite = new HashSet<>( );
-		int allowedRoleWriteSize = input.readInt( );
-		for ( int i = 0; i < allowedRoleWriteSize; i++ )
-		{
-			this.allowedRolesWrite.add( input.readString( ) );
-		}
-		this.allowedRolesGrant = new HashSet<>( );
-		int allowedRolesGrantSize = input.readInt( );
-		for ( int i = 0; i < allowedRolesGrantSize; i++ )
-		{
-			this.allowedRolesGrant.add( input.readString( ) );
-		}
-		this.restrictResourceAccess = input.readBoolean( );
-		long lma = input.readLong( );
-		if ( lma > -1 )
-		{
-			this.lastModifiedAt = new Date( lma );
-		}
-		long ca = input.readLong( );
-		if ( ca > -1 )
-		{
-			this.createdAt = new Date( ca );
-		}
 	}
 }

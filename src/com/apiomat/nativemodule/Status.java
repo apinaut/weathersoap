@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011 - 2016, Apinauten GmbH
+ * Copyright (c) 2011 - 2017, Apinauten GmbH
  * All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without modification, 
@@ -100,18 +100,20 @@ public enum Status
     NO_ORG_MEMBER( 767, "Customer is not a member of the organization" ),
     MODULE_CLASS_NOT_CONTAINED( 768, "Module main class is not contained in the uploaded file! Probably wrong module uploaded?" ),
     BAD_GROUP_NAME( 769, "Account name must contain only characters A-Z,a-z or 0-9!" ),
+    INVISIBLE_CLASS( 770, "Class is not visible to REST!" ),
+    MODULE_TYPE_NOT_ALLOWED( 771, "The action is not allowed for this module type" ),
     APPLICATION_NOT_FOUND( 801, "Application was not found!" ),
     CUSTOMER_NOT_FOUND( 802, "Customer was not found!" ),
     ID_NOT_FOUND( 803, "ID was not found!" ),
     MODEL_NOT_FOUND( 804, "Class was not found!" ),
     MODULE_NOT_FOUND( 805, "Module was not found!" ),
-    METAMODEL_NOT_FOUND( 806, "Meta Class was not found!" ),
     PLAN_NOT_FOUND( 807, "Plan was not found!" ),
     PROMOCODE_NOT_FOUND( 808, "Promotion code not valid!" ),
     DEMOAPP_NOT_FOUND( 809, "This language has no demo content" ),
     ORGANIZATION_NOT_FOUND( 810, "Organization was not found!" ),
     GROUP_NOT_FOUND( 811, "Group was not found!" ),
     ACCOUNT_NOT_FOUND( 812, "Account was not found!" ),
+    DEFAULT_MODULE_NOT_FOUND( 813, "Default module was not found for the given account" ),
     MODULE_USE_FORBIDDEN( 820, "Required module is not attached to app" ),
     PUSH_ERROR_APIKEY( 821, "No API Key defined for Push service!" ),
     PUSH_ERROR_CERTIFICATE( 822, "No certificate defined for Push service!" ),
@@ -134,6 +136,7 @@ public enum Status
     PLAN_INACTIVE( 1829, "Plan is not selectable!" ),
     ENTERPRISE( 1830, "Only available for enterprise installations." ),
     ACCOUNT_UNACCEPTED_CONTRACTS( 1831, "Account has unaccepted Contracts" ),
+    DELETE_MANDATORY_DEFAULT_MODULE( 1832, "It is not allowed to remove this default module" ),
     ID_EXISTS( 830, "ID exists!" ),
     NAME_RESERVED( 831, "Name is reserved!" ),
     CIRCULAR_DEPENDENCY( 832, "You can't set circular inheritance!" ),
@@ -146,6 +149,7 @@ public enum Status
     PW_CHANGE_W_TOKEN( 843, "Not authorized to change a user's password when authenticating with a token." ),
     TOKEN_AUTH_ERROR( 844, "The token could not be authenticated" ),
     TOKEN_READ_ONLY( 845, "The token can only be used for read requests." ),
+    AUTHENTICATION_REJECTED( 846, "Authentication with username/password was rejected by third-party-system." ),
     CRUD_ERROR( 901, "Internal error during CRUD operation" ),
     IMEXPORT_ERROR( 902, "Error during im/export!" ),
     COMPILE_ERROR( 903, "Classes could not be compiled!" ),
@@ -172,7 +176,9 @@ public enum Status
     NATIVEMODULE_PUSH( 925, "Could not push git repository" ),
     NO_DOGET_RETURN( 926, "The module's doGet didn't return a model" ),
     CUSTOMER_TWO_ORGS( 927, "The customer was found in two organizations" ),
-    EMAIL_ERROR( 928, "Error during sending email" ),
+    NATIVEMODULE_HOOKS_NOT_FOUND( 928, "Annotated hook class not found" ),
+    ANALYTICS_ERROR( 929, "The analytics instance couldn't process the request correctly" ),
+    EMAIL_ERROR( 930, "Error during sending email" ),
     HREF_NOT_FOUND( 601, "Class has no HREF; please save it first!" ),
     WRONG_URI_SYNTAX( 602, "URI syntax is wrong" ),
     WRONG_CLIENT_PROTOCOL( 603, "Client protocol is wrong" ),
@@ -194,6 +200,7 @@ public enum Status
     IN_DELETING_PROCESS( 619, "Object is in deleting process. Please try again later" ),
     SSO_REDIRECT( 620, "The request was redirected to an SSO Identity Provider" ),
     MANUAL_CONCURRENT_WRITE_FAILED( 621, "Concurrent write to own concurrent data type failed" ),
+    SAVE_FAILED( 622, "Load not executed because save already failed" ),
     MALICIOUS_MEMBER( 950, "Malicious use of member detected!" ),
     NULL(9999, ""); //placeholder
 

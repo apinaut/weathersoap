@@ -27,6 +27,11 @@ package com.apiomat.nativemodule;
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.List;
+import java.util.Map;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Class containing information about the current request
@@ -35,6 +40,10 @@ import java.security.NoSuchAlgorithmException;
  */
 public class Request
 {
+	private static final Pattern elementPattern = Pattern.compile( "," );
+	private static final Pattern valuePattern = Pattern.compile( ":" );
+	private static final Pattern replacePattern = Pattern.compile( "\"" );
+
 	private final String userEmail;
 	private final String userPassword;
 	private final String userToken;
@@ -50,6 +59,24 @@ public class Request
 	 * which would lead to an endless loop */
 	private boolean noAuth;
 
+	/* indicates if a request is authorized through an instance of AbstractAccount account */
+	private boolean isAccountRequest;
+
+	private String deltaSyncHeaderValue;
+	private Map<String, Long> deltaSyncMap;
+	private long deltaSyncMapComputedTimestamp;
+	private long deltaSyncChangedTimestamp;
+
+	private String deltaSyncDeletedHeaderValue;
+	private List<String> deltaSyncDeletedList;
+	private long deltaSyncDeletedListComputedTimestamp;
+	private long deltaSyncDeletedChangedTimestamp;
+
+	private boolean useDeltaSyncInFindByNames;
+	private boolean useDeltaSyncDeletedInResponse;
+
+	private Boolean hooksInUsedModulesEnabled;
+
 	/**
 	 * Constructor
 	 *
@@ -62,8 +89,7 @@ public class Request
 	 * @param system apiomat system (LIVE/STAGING/TEST)
 	 */
 	public Request( String userEmail, String userPassword, String userToken, String apiKey, String appName,
-		String callingModule,
-		String system )
+		String callingModule, String system )
 	{
 		super( );
 		this.userEmail = userEmail;
@@ -129,14 +155,231 @@ public class Request
 		return this.callingModule;
 	}
 
+	public boolean getIsAccountRequest( )
+	{
+		return this.isAccountRequest;
+	}
+
 	public void setNoAuth( boolean noAuth )
 	{
 		this.noAuth = noAuth;
 	}
 
+	public void setIsAccountRequest( boolean isAccountRequest )
+	{
+		this.isAccountRequest = isAccountRequest;
+	}
+
 	public String getApiKey( )
 	{
 		return this.apiKey;
+	}
+
+	/**
+	 * Returns the deltaSyncHeaderValue
+	 *
+	 * @return the deltaSyncHeaderValue
+	 */
+	public String getDeltaSyncHeaderValue( )
+	{
+		return this.deltaSyncHeaderValue;
+	}
+
+	/**
+	 * Sets the deltaSyncHeaderValue
+	 *
+	 * @param deltaSyncHeaderValue
+	 */
+	public void setDeltaSyncHeaderValue( String deltaSyncHeaderValue )
+	{
+		this.deltaSyncHeaderValue = deltaSyncHeaderValue;
+		this.deltaSyncChangedTimestamp = System.currentTimeMillis( );
+	}
+
+	/**
+	 * Computes a Map from the DeltaSync header value and returns it.
+	 * Only computes the map if not computed before or
+	 * if the DeltaSync header value changed after the last computation.
+	 *
+	 * @return the computed DeltaSyncMap. Null if any error occurs during computation.
+	 */
+	public Map<String, Long> getDeltaSyncMap( )
+	{
+		if ( this.deltaSyncMap == null ||
+			this.deltaSyncMapComputedTimestamp < this.deltaSyncChangedTimestamp )
+		{
+			/* Parse JSON by ourselves so no JSON library needs to be included just for the rarely used DeltaSync header */
+			try
+			{
+				final String elementsString =
+					getDeltaSyncHeaderValue( ).trim( ).substring( 1, getDeltaSyncHeaderValue( ).trim( ).length( ) - 1 );
+				final String[ ] elements = elementPattern.split( elementsString );
+				final Map<String, Long> finalMap = Stream.of( elements )
+					.map( element -> valuePattern.split( element ) )
+					.collect(
+						Collectors.toMap( splitElement -> replacePattern.matcher( splitElement[ 0 ] ).replaceAll( "" ),
+							splitElement -> Long.parseLong( splitElement[ 1 ] ) ) );
+				this.deltaSyncMap = finalMap;
+				this.deltaSyncMapComputedTimestamp = System.currentTimeMillis( );
+			}
+			catch ( Exception ex )
+			{
+				this.deltaSyncMap = null;
+			}
+		}
+		return this.deltaSyncMap;
+	}
+
+	/**
+	 * Sets the deltaSyncMap and computes and sets deltaSyncHeaderValue.
+	 *
+	 * @param deltaSyncMap
+	 */
+	public void setDeltaSyncMap( Map<String, Long> deltaSyncMap )
+	{
+		if ( deltaSyncMap == null )
+		{
+			this.deltaSyncHeaderValue = null;
+		}
+		else if ( deltaSyncMap.size( ) == 0 )
+		{
+			this.deltaSyncHeaderValue = "{}";
+		}
+		else
+		{
+			String manualJson = deltaSyncMap.entrySet( ).stream( )
+				.map( entry -> "\"" + entry.getKey( ) + "\":" + entry.getValue( ) )
+				.reduce( ( accu, newElem ) -> accu + "," + newElem )
+				.orElse( null );
+			if ( manualJson == null )
+			{
+				/* size 0 was handled before, so an error must have occurred */
+				throw new RuntimeException( "An error occured during computing a JSON object from a Map" );
+			}
+			manualJson = "{" + manualJson + "}";
+			this.deltaSyncHeaderValue = manualJson;
+		}
+		this.deltaSyncMap = deltaSyncMap;
+		this.deltaSyncChangedTimestamp = System.currentTimeMillis( );
+	}
+
+	/**
+	 * @return the deltaSyncDeletedHeaderValue
+	 */
+	public String getDeltaSyncDeletedHeaderValue( )
+	{
+		return this.deltaSyncDeletedHeaderValue;
+	}
+
+	/**
+	 * @param deltaSyncDeletedHeaderValue the deltaSyncDeletedHeaderValue to set
+	 */
+	public void setDeltaSyncDeletedHeaderValue( String deltaSyncDeletedHeaderValue )
+	{
+		this.deltaSyncDeletedHeaderValue = deltaSyncDeletedHeaderValue;
+		this.deltaSyncDeletedChangedTimestamp = System.currentTimeMillis( );
+	}
+
+	/**
+	 * Computes a List from the DeltaSync deleted header value and returns it.
+	 * Only computes the list if not computed before or
+	 * if the DeltaSync deleted header value changed after the last computation.
+	 *
+	 * @return the computed deltaSyncDeletedList. Null if any error occurs during computation.
+	 */
+	public List<String> getDeltaSyncDeletedList( )
+	{
+		if ( this.deltaSyncDeletedList == null ||
+			this.deltaSyncDeletedListComputedTimestamp < this.deltaSyncDeletedChangedTimestamp )
+		{
+			/* Parse JSON by ourselves so no JSON library needs to be included just for the rarely used DeltaSync header */
+			try
+			{
+				final String elementsString =
+					getDeltaSyncDeletedHeaderValue( ).trim( ).substring( 1,
+						getDeltaSyncDeletedHeaderValue( ).trim( ).length( ) - 1 );
+				final String[ ] elements = elementPattern.split( elementsString );
+				this.deltaSyncDeletedList = Stream.of( elements )
+					.map( element -> replacePattern.matcher( element ).replaceAll( "" ) )
+					.collect( Collectors.toList( ) );
+				this.deltaSyncDeletedListComputedTimestamp = System.currentTimeMillis( );
+			}
+			catch ( Exception ex )
+			{
+				this.deltaSyncDeletedList = null;
+			}
+		}
+		return this.deltaSyncDeletedList;
+	}
+
+	/**
+	 * Sets the deltaSyncDeletedList and computes and sets deltaSyncDeletedHeaderValue.
+	 *
+	 * @param deltaSyncDeletedList the deltaSyncDeletedList to set
+	 */
+	public void setDeltaSyncDeletedList( List<String> deltaSyncDeletedList )
+	{
+		if ( deltaSyncDeletedList == null )
+		{
+			this.deltaSyncDeletedHeaderValue = null;
+		}
+		else if ( deltaSyncDeletedList.size( ) == 0 )
+		{
+			this.deltaSyncDeletedHeaderValue = "[]";
+		}
+		else
+		{
+			String manualJson = deltaSyncDeletedList.stream( )
+				.map( element -> "\"" + element + "\"" )
+				.reduce( ( accu, newElem ) -> accu + "," + newElem )
+				.orElse( null );
+			if ( manualJson == null )
+			{
+				/* size 0 was handled before, so an error must have occurred */
+				throw new RuntimeException( "An error occured during computing a JSON array from a List of Strings" );
+			}
+			manualJson = "[" + manualJson + "]";
+			this.deltaSyncDeletedHeaderValue = manualJson;
+		}
+		this.deltaSyncDeletedList = deltaSyncDeletedList;
+		this.deltaSyncDeletedChangedTimestamp = System.currentTimeMillis( );
+	}
+
+	/**
+	 * @return the useDeltaSyncInFindByNames
+	 */
+	public boolean isUseDeltaSyncInFindByNames( )
+	{
+		return this.useDeltaSyncInFindByNames;
+	}
+
+	/**
+	 * Needs to be set to true if you want the DeltaSync info in the Request object to be used when calling findByNames
+	 *
+	 * @param useDeltaSyncInFindByNames the useDeltaSyncInFindByNames to set
+	 */
+	public void setUseDeltaSyncInFindByNames( boolean useDeltaSyncInFindByNames )
+	{
+		this.useDeltaSyncInFindByNames = useDeltaSyncInFindByNames;
+	}
+
+	/**
+	 * @return the useDeltaSyncDeletedInResponse
+	 */
+	public boolean isUseDeltaSyncDeletedInResponse( )
+	{
+		return this.useDeltaSyncDeletedInResponse;
+	}
+
+	/**
+	 * Needs to be set to true if you want the DeltaSync-deleted info in the Request object to be used in the response
+	 * to the client
+	 *
+	 * @param useDeltaSyncDeletedInResponse the useDeltaSyncDeletedInResponse to set
+	 */
+	public void setUseDeltaSyncDeletedInResponse( boolean useDeltaSyncDeletedInResponse )
+	{
+		this.useDeltaSyncDeletedInResponse = useDeltaSyncDeletedInResponse;
 	}
 
 	/**
@@ -149,8 +392,7 @@ public class Request
 	 */
 	public static String sha( final String password ) throws NoSuchAlgorithmException, UnsupportedEncodingException
 	{
-		MessageDigest md;
-		md = MessageDigest.getInstance( "SHA-256" );
+		final MessageDigest md = MessageDigest.getInstance( "SHA-256" );
 		md.reset( );
 		md.update( password.getBytes( "UTF-8" ) );
 		return new String( encodeHex( md.digest( ) ) );
@@ -169,5 +411,23 @@ public class Request
 			out[ ( j++ ) ] = toDigits[ ( 0xF & data[ i ] ) ];
 		}
 		return out;
+	}
+
+	/**
+	 * @return the hooksInUsedModulesEnabled
+	 */
+	public Boolean getHooksInUsedModulesEnabled( )
+	{
+		return this.hooksInUsedModulesEnabled;
+	}
+
+	/**
+	 * Has to be set explicitly to true to secure execution of hook-methods for classes in used modules
+	 * 
+	 * @param hooksInUsedModulesEnabled the hooksInUsedModulesEnabled-flag to set
+	 */
+	public void setHooksInUsedModulesEnabled( Boolean hooksInUsedModulesEnabled )
+	{
+		this.hooksInUsedModulesEnabled = hooksInUsedModulesEnabled;
 	}
 }

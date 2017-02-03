@@ -1,25 +1,25 @@
 /*
- * Copyright (c) 2011 - 2016, Apinauten GmbH
+ * Copyright (c) 2011 - 2017, Apinauten GmbH
  * All rights reserved.
- * 
- * Redistribution and use in source and binary forms, with or without modification, 
+ *
+ * Redistribution and use in source and binary forms, with or without modification,
  * are permitted provided that the following conditions are met:
  *
- *  * Redistributions of source code must retain the above copyright notice, this 
+ *  * Redistributions of source code must retain the above copyright notice, this
  *    list of conditions and the following disclaimer.
- *  * Redistributions in binary form must reproduce the above copyright notice, 
- *    this list of conditions and the following disclaimer in the documentation 
+ *  * Redistributions in binary form must reproduce the above copyright notice,
+ *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
  *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
- * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED 
- * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. 
- * IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, 
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+ * IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
  * INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
- * BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, 
- * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF 
- * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE 
- * OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED 
+ * BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+ * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE
+ * OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 package com.apiomat.nativemodule.soapweathertransient;
@@ -31,23 +31,20 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import com.apiomat.nativemodule.*;
 
-import com.esotericsoftware.kryo.Kryo;
-import com.esotericsoftware.kryo.io.Input;
-import com.esotericsoftware.kryo.io.Output;
-
 
 import com.apiomat.nativemodule.basics.*;
-
+import com.apiomat.nativemodule.AuthState;
 /**
-* Generated class for your CityWeather data model 
-* 
+* Generated class for your CityWeather data model
+*
 * DO NOT CHANGE ANY CODE EXCEPT CLASS ANNOTATIONS OR CLASS ATTRIBUTES HERE!
 * EVERYTHING ELSE WILL GET OVERWRITTEN!
-* 
+*
 */
 @SuppressWarnings( "unused" )
-@Model( moduleName = "SOAPWeatherTransient", hooksClassName = "com.apiomat.nativemodule.soapweathertransient.CityWeatherHooks",
-    isTransient = true,    requiredUserRoleCreate=UserRole.User, requiredUserRoleRead=UserRole.User,
+@Model( moduleName = "SOAPWeatherTransient",
+    hooksClassName = "com.apiomat.nativemodule.soapweathertransient.CityWeatherHooks",
+    isTransient = true,     requiredUserRoleCreate=UserRole.User, requiredUserRoleRead=UserRole.User,
     requiredUserRoleWrite=UserRole.Owner, restrictResourceAccess=false,
     allowedRolesCreate={}, allowedRolesRead={},
     allowedRolesWrite={}, allowedRolesGrant={})
@@ -61,7 +58,7 @@ public class CityWeather extends AbstractClientDataModel implements IModel<CityW
      * Contains the name of the model
      */
     public static final String MODEL_NAME = "CityWeather";
-    
+
     /** class specific attributes */
     private String cityName = null;
     private String countryName = null;
@@ -71,7 +68,7 @@ public class CityWeather extends AbstractClientDataModel implements IModel<CityW
      */
     public CityWeather ()
     {}
-    
+
     /**
      * Returns the name of the module where this class belongs to
      */
@@ -80,7 +77,7 @@ public class CityWeather extends AbstractClientDataModel implements IModel<CityW
     {
         return MODULE_NAME;
     }
-    
+
     /**
      * Returns the name of the model
      */
@@ -120,50 +117,4 @@ public class CityWeather extends AbstractClientDataModel implements IModel<CityW
         this.temperature = arg;
     }
 
-    @Override
-    @SuppressWarnings("unchecked")
-    public void write( final Kryo kryo, final Output output )
-    {
-        super.write( kryo, output );
-        final String _cityName = this.cityName;
-        output.writeBoolean( _cityName != null );
-        if( _cityName != null )
-        {
-            output.writeString( _cityName );
-        }
-        final String _countryName = this.countryName;
-        output.writeBoolean( _countryName != null );
-        if( _countryName != null )
-        {
-            output.writeString( _countryName );
-        }
-        final Double _temperature = this.temperature;
-        output.writeBoolean( _temperature != null );
-        if( _temperature != null )
-        {
-            output.writeDouble( _temperature );
-        }
-    }
-
-    @Override
-    @SuppressWarnings("unchecked")
-    public void read( final Kryo kryo, final Input input )
-    {
-        super.read( kryo, input );
-        
-        final Request req = (Request)kryo.getContext( ).get( "creq" );
-        req.toString( );
-        if( input.readBoolean() )
-        {
-            this.cityName = input.readString( );
-        }
-        if( input.readBoolean() )
-        {
-            this.countryName = input.readString( );
-        }
-        if( input.readBoolean() )
-        {
-            this.temperature = input.readDouble( );
-        }
-    }
 }

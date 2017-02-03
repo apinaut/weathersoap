@@ -54,8 +54,19 @@
     -->
 
 	<target name="downloadNativeModule" description="Download the NativeModule">
-		<get dest="./nm.zip" src="${host}/yambas/rest/modules/${moduleName}/sdk?usedSystem=${system}&amp;merge=${merge}" username="${customerEmail}" password="${password}" />
-		<mkdir dir="./tmp" />
+       <condition property="system.set" value="usedSystem=${system}&amp;" else="">
+          <isset property="system"/>
+        </condition>
+
+        <condition property="merge.set" value="${merge}" else="true">
+          <isset property="merge"/>
+        </condition>
+
+        <condition property="eclipse.set" value="${eclipse}" else="true">
+          <isset property="eclipse"/>
+        </condition>
+        <get dest="./nm.zip" src="${host}/yambas/rest/modules/${moduleName}/sdk?${system.set}merge=${merge.set}&amp;eclipse=${eclipse.set}" username="${customerEmail}" password="${password}" />
+        <mkdir dir="./tmp" />
 
 		<copy tofile="./tmp/sdk.properties" file="sdk.properties" />
 		<copy todir="./tmp">
@@ -81,20 +92,12 @@
 	</target>
 
 	<target name="package" depends="compile" description="Package the NativeModule as JAR">
-		<unzip dest="${lib}_tmp">
-			<fileset dir="${lib}" includes="**/*.jar" />
-			<patternset>
-				<exclude name="**/INDEX.LIST" />
-				<exclude name="**/*.java" />
-			</patternset>
-		</unzip>
 		<antcall target="_packageAntOld" />
 		<antcall target="_packageAntNew" />
 	</target>
 
 	<target name="_packageAntOld" if="isOldAnt">
 		<jar destfile="${dist}/${moduleName}.jar" duplicate="preserve">
-			<fileset dir="${lib}_tmp" />
 			<fileset dir="${lib}" />
 			<fileset dir="${build}">
 				<include name="**/*.class" />
@@ -107,13 +110,14 @@
 				<include name="**/*.png" />
 				<include name="**/META-INF/**" />
 			</fileset>
+			<fileset dir="">
+				<include name="pom.xml"/>
+			</fileset>
 		</jar>
-		<delete dir="${lib}_tmp" />
 	</target>
 
 	<target name="_packageAntNew" if="isNewAnt">
 		<jar destfile="${dist}/${moduleName}.jar" duplicate="preserve" zip64mode="always">
-			<fileset dir="${lib}_tmp" />
 			<fileset dir="${lib}" />
 			<fileset dir="${build}">
 				<include name="**/*.class" />
@@ -126,8 +130,10 @@
 				<include name="**/*.png" />
 				<include name="**/META-INF/**" />
 			</fileset>
+			<fileset dir="">
+				<include name="pom.xml"/>
+			</fileset>
 		</jar>
-		<delete dir="${lib}_tmp" />
 	</target>
 
 	<target name="uploadNativeModule" depends="package" description="Upload the NativeModule">

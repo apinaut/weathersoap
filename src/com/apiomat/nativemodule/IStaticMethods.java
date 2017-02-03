@@ -25,6 +25,7 @@
 package com.apiomat.nativemodule;
 
 import java.util.Collection;
+import java.util.Set;
 
 import com.apiomat.nativemodule.interfaces.dmap.ADistributedMapHandler;
 
@@ -42,6 +43,14 @@ public interface IStaticMethods
 	 * @param message
 	 */
 	public void log( String applicationName, String message );
+
+	/**
+	 * Returns the app as a json-conform String
+	 *
+	 * @param applicationName
+	 * @return the json-String
+	 */
+	public String readAppConfig( String applicationName );
 
 	/**
 	 * Logs an error to the apps database
@@ -95,6 +104,21 @@ public interface IStaticMethods
 	public void throwException( final String applicationName, final String message );
 
 	/**
+	 * Throws a TriggeredScriptException with a status code
+	 *
+	 * @param status statusCode
+	 * @param message message
+	 */
+	public void throwException( final int status, final String message );
+
+	/**
+	 * Throws an AuthenticationException
+	 *
+	 * @param message message
+	 */
+	public void throwAuthenticationException( final String message );
+
+	/**
 	 * Finds a model by its foreign ID
 	 *
 	 * @param applicationName
@@ -129,7 +153,10 @@ public interface IStaticMethods
 	 * @param moduleName
 	 * @param className
 	 * @return a new data model object
+	 * @deprecated When creating an object of a class that's in another module, a ClassCastException can occur.
+	 *             Use {@link #createObject(String, String, String, Request)} instead.
 	 */
+	@Deprecated
 	public IModel<?> createObject( final String applicationName, final String moduleName, final String className );
 
 	/**
@@ -143,6 +170,33 @@ public interface IStaticMethods
 	 */
 	public IModel<?> createObject( final String applicationName, final String moduleName, final String className,
 		final Request r );
+
+	/**
+	 * Checks the credentials given in the request. This method will return false if the request was not from a customer
+	 * or organization or the credentials did not match
+	 *
+	 * @param r the request to check
+	 * @return true, if the credentials in request are correct and the requestor was an organization or customer
+	 */
+	public boolean checkAccountRequestCredentials( final Request r );
+
+	/**
+	 * Checks the apiKey given in the request. This method will return true if the apikey is equal.
+	 *
+	 * @param r the request to check
+	 * @return true, if the apikey in request is equal to the apikey for the current system
+	 */
+	public boolean checkRequestApikey( final Request r );
+
+	/**
+	 * Returns the roles of the requesting customer for the requested app and system.
+	 * If the requester is not a customer or no app is given, it will return an empty array.
+	 * It will also return an empty array, if the request credentials are invalid.
+	 *
+	 * @param r the request
+	 * @return the roles of the requesting customer for the requested app and system.
+	 */
+	public Set<CustomerRole> getRequesterAppRoles( final Request r );
 
 	/**
 	 * Finds a model by its ID
