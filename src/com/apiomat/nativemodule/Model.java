@@ -128,13 +128,9 @@ public @interface Model
 	AuthState useOwnAuth( ) default AuthState.UNKNOWN;
 
 	/**
-	 * Only important in combination with "useOwnAuth == AuthState.YES".
-	 * TRUE if the NM auth class developer wants ApiOmat to call the auth hook method,
-	 * even if the token was authenticated by ApiOmat and is valid.
-	 * Invalid tokens get rejected by ApiOmat automatically and don't get passed to an auth hook method.
-	 *
-	 * Note: The request to get a token in exchange for credentials
-	 * went through the configured auth class(es) in either case.
+	 * @deprecated Not used anymore, auth class will be called depending on the aplication settings and transparently
+	 *             for basic or token/bearer authentication
 	 */
+	@Deprecated
 	boolean callAuthWithValidToken( ) default true;
 }

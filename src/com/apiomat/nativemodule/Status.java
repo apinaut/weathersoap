@@ -232,6 +232,6 @@ public enum Status
 				return s;
 			}
 		}
-		return null;
+		return NULL;
 	}
 }

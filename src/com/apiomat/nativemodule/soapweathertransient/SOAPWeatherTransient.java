@@ -43,7 +43,7 @@ import com.apiomat.nativemodule.Module;
  * in these overriden methods, because they are initialized again before each call.
  *
  */
-@Module( description = "http://www.webser<br/>vicex.net/globalwe<br/>ather.asmx?WSDL", usedModules = { } )
+@Module( description = "http://www.webser<br/>vicex.net/globalwe<br/>ather.asmx?WSDL", usedModules = {} )
 public class SOAPWeatherTransient implements IModule
 {
 	static IApplicationConfigProxy APP_CONFIG_PROXY;

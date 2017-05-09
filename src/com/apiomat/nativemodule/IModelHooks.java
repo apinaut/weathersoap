@@ -55,10 +55,6 @@ public interface IModelHooks<T> extends IModelHooksCommon<T>
 	 * If access on an arbitrary model is checked, depending on the order in which an app configured its authentication
 	 * classes, this class gets loaded and the authentication method gets called.
 	 *
-	 * Note: passwordOrToken only contains a token if the Model annotation
-	 * {@link com.apiomat.nativemodule.Model#callAuthWithValidToken()} is set to {@value false} AND the token is valid.
-	 * Invalid tokens get rejected by ApiOmat automatically.
-	 *
 	 * @param httpVerb GET / POST / DELETE / PUT
 	 * @param modelName name of the model where the user wants access to
 	 * @param modelForeignId foreign ID of the model where the user wants access to

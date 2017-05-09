@@ -78,13 +78,6 @@
             <systemPath>${project.basedir}/lib/cxf-rt-ws-mex-3.0.4.jar</systemPath>
         </dependency>
         <dependency>
-            <groupId>cxf-rt-bindings-soap</groupId>
-            <artifactId>cxf-rt-bindings-soap</artifactId>
-            <version>3.0.4</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/lib/cxf-rt-bindings-soap-3.0.4.jar</systemPath>
-        </dependency>
-        <dependency>
             <groupId>cxf-rt-rs-security-cors</groupId>
             <artifactId>cxf-rt-rs-security-cors</artifactId>
             <version>3.0.4</version>
@@ -92,11 +85,11 @@
             <systemPath>${project.basedir}/lib/cxf-rt-rs-security-cors-3.0.4.jar</systemPath>
         </dependency>
         <dependency>
-            <groupId>cxf-rt-management</groupId>
-            <artifactId>cxf-rt-management</artifactId>
+            <groupId>cxf-rt-bindings-soap</groupId>
+            <artifactId>cxf-rt-bindings-soap</artifactId>
             <version>3.0.4</version>
             <scope>system</scope>
-            <systemPath>${project.basedir}/lib/cxf-rt-management-3.0.4.jar</systemPath>
+            <systemPath>${project.basedir}/lib/cxf-rt-bindings-soap-3.0.4.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>cxf-rt-ws-policy</groupId>
@@ -106,11 +99,11 @@
             <systemPath>${project.basedir}/lib/cxf-rt-ws-policy-3.0.4.jar</systemPath>
         </dependency>
         <dependency>
-            <groupId>aopalliance</groupId>
-            <artifactId>aopalliance</artifactId>
-            <version>1.0</version>
+            <groupId>cxf-rt-management</groupId>
+            <artifactId>cxf-rt-management</artifactId>
+            <version>3.0.4</version>
             <scope>system</scope>
-            <systemPath>${project.basedir}/lib/aopalliance-1.0.jar</systemPath>
+            <systemPath>${project.basedir}/lib/cxf-rt-management-3.0.4.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>httpcore</groupId>
@@ -118,6 +111,13 @@
             <version>4.3.3</version>
             <scope>system</scope>
             <systemPath>${project.basedir}/lib/httpcore-4.3.3.jar</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>aopalliance</groupId>
+            <artifactId>aopalliance</artifactId>
+            <version>1.0</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/aopalliance-1.0.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>servlet-api</groupId>
@@ -211,6 +211,13 @@
             <systemPath>${project.basedir}/lib/wss4j-ws-security-dom-2.0.3.jar</systemPath>
         </dependency>
         <dependency>
+            <groupId>wss4j-ws-security-common</groupId>
+            <artifactId>wss4j-ws-security-common</artifactId>
+            <version>2.0.3</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/wss4j-ws-security-common-2.0.3.jar</systemPath>
+        </dependency>
+        <dependency>
             <groupId>activemq-openwire-legacy</groupId>
             <artifactId>activemq-openwire-legacy</artifactId>
             <version>5.9.1</version>
@@ -223,13 +230,6 @@
             <version>1.16</version>
             <scope>system</scope>
             <systemPath>${project.basedir}/lib/jersey-core-1.16.jar</systemPath>
-        </dependency>
-        <dependency>
-            <groupId>wss4j-ws-security-common</groupId>
-            <artifactId>wss4j-ws-security-common</artifactId>
-            <version>2.0.3</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/lib/wss4j-ws-security-common-2.0.3.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>cxf-rt-bindings-xml</groupId>
@@ -288,18 +288,18 @@
             <systemPath>${project.basedir}/lib/hawtbuf-1.9.jar</systemPath>
         </dependency>
         <dependency>
-            <groupId>cxf-rt-frontend-js</groupId>
-            <artifactId>cxf-rt-frontend-js</artifactId>
-            <version>3.0.4</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/lib/cxf-rt-frontend-js-3.0.4.jar</systemPath>
-        </dependency>
-        <dependency>
             <groupId>cxf-xjc-runtime</groupId>
             <artifactId>cxf-xjc-runtime</artifactId>
             <version>3.0.2</version>
             <scope>system</scope>
             <systemPath>${project.basedir}/lib/cxf-xjc-runtime-3.0.2.jar</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>cxf-rt-frontend-js</groupId>
+            <artifactId>cxf-rt-frontend-js</artifactId>
+            <version>3.0.4</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/cxf-rt-frontend-js-3.0.4.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>cxf-rt-rs-extension-providers</groupId>
@@ -323,18 +323,18 @@
             <systemPath>${project.basedir}/lib/xmlschema-core-2.2.1.jar</systemPath>
         </dependency>
         <dependency>
-            <groupId>jaxb-api</groupId>
-            <artifactId>jaxb-api</artifactId>
-            <version>2.2.11</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/lib/jaxb-api-2.2.11.jar</systemPath>
-        </dependency>
-        <dependency>
             <groupId>swagger-annotations</groupId>
             <artifactId>swagger-annotations</artifactId>
             <version>1.5.10</version>
             <scope>system</scope>
             <systemPath>${project.basedir}/lib/swagger-annotations-1.5.10.jar</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>jaxb-api</groupId>
+            <artifactId>jaxb-api</artifactId>
+            <version>2.2.11</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/jaxb-api-2.2.11.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>cxf-rt-features-clustering</groupId>
@@ -365,18 +365,18 @@
             <systemPath>${project.basedir}/lib/activemq-broker-5.9.1.jar</systemPath>
         </dependency>
         <dependency>
-            <groupId>anttask</groupId>
-            <artifactId>anttask</artifactId>
-            <version>1.0.0</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/lib/anttask.jar</systemPath>
-        </dependency>
-        <dependency>
             <groupId>commons-lang</groupId>
             <artifactId>commons-lang</artifactId>
             <version>2.6</version>
             <scope>system</scope>
             <systemPath>${project.basedir}/lib/commons-lang-2.6.jar</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>httpclient</groupId>
+            <artifactId>httpclient</artifactId>
+            <version>4.3.5</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/httpclient-4.3.5.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>cxf-rt-ws-security</groupId>
@@ -386,11 +386,11 @@
             <systemPath>${project.basedir}/lib/cxf-rt-ws-security-3.0.4.jar</systemPath>
         </dependency>
         <dependency>
-            <groupId>httpclient</groupId>
-            <artifactId>httpclient</artifactId>
-            <version>4.3.5</version>
+            <groupId>anttask</groupId>
+            <artifactId>anttask</artifactId>
+            <version>1.0.0</version>
             <scope>system</scope>
-            <systemPath>${project.basedir}/lib/httpclient-4.3.5.jar</systemPath>
+            <systemPath>${project.basedir}/lib/anttask.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>cxf-rt-transports-http-hc</groupId>
@@ -463,18 +463,18 @@
             <systemPath>${project.basedir}/lib/antlr-2.7.7.jar</systemPath>
         </dependency>
         <dependency>
-            <groupId>cxf-rt-databinding-jaxb</groupId>
-            <artifactId>cxf-rt-databinding-jaxb</artifactId>
-            <version>3.0.4</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/lib/cxf-rt-databinding-jaxb-3.0.4.jar</systemPath>
-        </dependency>
-        <dependency>
             <groupId>neethi</groupId>
             <artifactId>neethi</artifactId>
             <version>3.0.3</version>
             <scope>system</scope>
             <systemPath>${project.basedir}/lib/neethi-3.0.3.jar</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>cxf-rt-databinding-jaxb</groupId>
+            <artifactId>cxf-rt-databinding-jaxb</artifactId>
+            <version>3.0.4</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/cxf-rt-databinding-jaxb-3.0.4.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>cxf-rt-wsdl</groupId>
@@ -491,18 +491,18 @@
             <systemPath>${project.basedir}/lib/jasypt-1.9.2.jar</systemPath>
         </dependency>
         <dependency>
-            <groupId>cxf-rt-databinding-aegis</groupId>
-            <artifactId>cxf-rt-databinding-aegis</artifactId>
-            <version>3.0.4</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/lib/cxf-rt-databinding-aegis-3.0.4.jar</systemPath>
-        </dependency>
-        <dependency>
             <groupId>jaxb-xjc</groupId>
             <artifactId>jaxb-xjc</artifactId>
             <version>2.2.11</version>
             <scope>system</scope>
             <systemPath>${project.basedir}/lib/jaxb-xjc-2.2.11.jar</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>cxf-rt-databinding-aegis</groupId>
+            <artifactId>cxf-rt-databinding-aegis</artifactId>
+            <version>3.0.4</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/cxf-rt-databinding-aegis-3.0.4.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>wss4j-bindings</groupId>
